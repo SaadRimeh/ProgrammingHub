@@ -10,7 +10,6 @@ import notificationRoutes from "./routes/notification.route.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { arcjetMiddleware } from "./middleware/arcjet.middleware.js";
-import { server } from "./socket.js";
 
 const app = express();
 
@@ -39,7 +38,7 @@ const startServer = async () => {
 
     // listen for local development
     if (ENV.NODE_ENV !== "production") {
-      server.listen(ENV.PORT, () => console.log("Server is up and running on PORT:", ENV.PORT));
+      app.listen(ENV.PORT, () => console.log("Server is up and running on PORT:", ENV.PORT));
     }
   } catch (error) {
     console.error("Failed to start server:", error.message);
@@ -49,5 +48,5 @@ const startServer = async () => {
 
 startServer();
 
-
+// export for vercel
 export default app;
