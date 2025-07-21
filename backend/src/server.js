@@ -10,6 +10,7 @@ import notificationRoutes from "./routes/notification.route.js";
 import { ENV } from "./config/env.js";
 import { connectDB } from "./config/db.js";
 import { arcjetMiddleware } from "./middleware/arcjet.middleware.js";
+import { server } from "./socket.js";
 
 const app = express();
 
@@ -36,8 +37,9 @@ const startServer = async () => {
   try {
     await connectDB();
 
+    // listen for local development
     if (ENV.NODE_ENV !== "production") {
-      app.listen(ENV.PORT, () => console.log("Server is up and running on PORT:", ENV.PORT));
+      server.listen(ENV.PORT, () => console.log("Server is up and running on PORT:", ENV.PORT));
     }
   } catch (error) {
     console.error("Failed to start server:", error.message);

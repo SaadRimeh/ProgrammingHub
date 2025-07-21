@@ -303,6 +303,27 @@ This backend provides a RESTful API for a social media-like application, support
 
 ---
 
+### Chat
+
+#### Get Messages
+- **GET** `/api/messages/:otherUserId`
+- **Headers:** `Authorization: Bearer <ClerkToken>`
+- **Response:**
+```json
+[
+  {
+    "_id": "messageId",
+    "sender": "senderId",
+    "receiver": "receiverId",
+    "content": "Hello!",
+    "createdAt": "2024-05-01T12:00:00.000Z",
+    "updatedAt": "2024-05-01T12:00:00.000Z"
+  }
+]
+```
+
+---
+
 ## Data Models
 
 ### User
@@ -348,6 +369,17 @@ This backend provides a RESTful API for a social media-like application, support
 }
 ```
 
+### Message
+```js
+{
+  sender: UserId,
+  receiver: UserId,
+  content: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
 ### Notification
 ```js
 {
@@ -358,6 +390,28 @@ This backend provides a RESTful API for a social media-like application, support
   updatedAt: Date
 }
 ```
+
+---
+
+## Real-Time Chat (Socket.io)
+
+The backend uses Socket.io for real-time chat functionality.
+
+### Connecting to the Socket Server
+
+Connect to the socket server using the `userId` as a query parameter:
+`const socket = io("http://localhost:PORT", { query: { userId: "your_user_id" } });`
+
+### Socket Events
+
+- **`getOnlineUsers`**: Emitted when a user connects or disconnects. Returns an array of online user IDs.
+  - `socket.on("getOnlineUsers", (users) => { ... });`
+
+- **`sendMessage`**: Send a message to another user.
+  - `socket.emit("sendMessage", { senderId, receiverId, message });`
+
+- **`newMessage`**: Receive a new message.
+  - `socket.on("newMessage", (message) => { ... });`
 
 ---
 
